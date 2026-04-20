@@ -1,3 +1,4 @@
 from functions import *
 
-data_fetch()
+info, data = fetch_stock_data()
+add_technical_indicators(None)
