@@ -1,0 +1,1 @@
+A machine learning system that predicts stock prices using **Gaussian Process Regression (GPR)** , uniquely providing not just point predictions but also **quantified uncertainty** (confidence intervals) for each forecast.
