@@ -1,5 +1,6 @@
 import yfinance as yf
 import numpy as np
+import mplfinance as mpf
 from parameters import *
 
 
@@ -69,11 +70,24 @@ def add_technical_indicators(data):
         
         return data
     
+    def calculate_Volatility(data):
+
+        # Calculamos los retornos de cada registro
+        data["Returns"] = data["Close"].pct_change()
+
+        # Calculamos la volatilidad
+        data["Volatility"] = data["Returns"].rolling(window = volatility_interval).std()
+
+        return data
+
     data = calculate_MA(data)
     data = calculate_RSI(data)
     data = calculate_MACD(data)
     data = calculate_Bollinger_Bands(data)
-    
-    print("Calcular MA20, RSI, MACD, Bollinger, Volatilidad")
+    data = calculate_Volatility(data)
 
     return data
+
+def graph_data(data):
+
+    mpf.plot(data[-graph_interval:], type = "candle", volume = False, style = "charles", title = "Candlestick Chart", ylabel = "Price")

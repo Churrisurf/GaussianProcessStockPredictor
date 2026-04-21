@@ -7,7 +7,6 @@ ticker_parameters = {
     "auto_adjust" : True
 }
 
-# intervalo de la media movil y el índice de fuerza relativa
 MA_interval = 20
 RSI_interval = 14
 
@@ -21,3 +20,7 @@ bollinger_parameters = {
     "interval" : 20,
     "deviations" : 2 
 }
+
+volatility_interval = 20
+
+graph_interval = 100
