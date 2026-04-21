@@ -19,14 +19,14 @@ def add_technical_indicators(data):
     def calculate_MA(data):
 
         # Calculamos la media movil
-        data["MA"] = data["close"].rolling(window = MA_interval).mean()
+        data["MA"] = data["Close"].rolling(window = MA_interval).mean()
 
         return data
     
     def calculate_RSI(data):
 
         # Calculamos los componentes del índice de fuerza relativa
-        delta = data["close"].diff()
+        delta = data["Close"].diff()
 
         gain = delta.where(delta > 0, 0)
         loss = -delta.where(delta < 0, 0)
@@ -44,27 +44,36 @@ def add_technical_indicators(data):
     def calculate_MACD(data):
 
         # Calculamos los componentes de la convergencia / divergencia de medias moviles
-        fast_ema = data["close"].ewn(span = macd_parameters["fast_ema_period"], adjust = False).mean()
-        slow_ema = data["close"].ewn(span = macd_parameters["slow_ema_period"], adjust = False).mean()
+        fast_ema = data["Close"].ewm(span = macd_parameters["fast_ema_interval"], adjust = False).mean()
+        slow_ema = data["Close"].ewm(span = macd_parameters["slow_ema_interval"], adjust = False).mean()
 
         #Calculamos el MACD, la señal, y el histograma
         data["MACD"] = fast_ema - slow_ema
 
-        data["Signal"] = data["MACD"].ewm(span = macd_parameters["signal_period"], adjust=False).mean()
+        data["Signal"] = data["MACD"].ewm(span = macd_parameters["signal_interval"], adjust=False).mean()
 
         data["MACD_histogram"] = data["MACD"] - data["Signal"]
 
         return data
     
-    print("Calcular MA20, RSI, MACD, Bollinger, Volatilidad")
+    def calculate_Bollinger_Bands(data):
+
+        # Calculamos la banda central
+        data["BB_middle"] = data["Close"].rolling(window = bollinger_parameters["interval"]).mean()
+        
+        # Calculamos la banda superior e inferior
+        std_dev = data["Close"].rolling(window = bollinger_parameters["interval"]).std()
+
+        data["BB_upper"] = data["BB_middle"] + (std_dev * bollinger_parameters["deviations"])
+        data["BB_lower"] = data["BB_middle"] - (std_dev * bollinger_parameters["deviations"])
+        
+        return data
     
     data = calculate_MA(data)
     data = calculate_RSI(data)
     data = calculate_MACD(data)
+    data = calculate_Bollinger_Bands(data)
     
+    print("Calcular MA20, RSI, MACD, Bollinger, Volatilidad")
+
     return data
-
-    
-
-
-

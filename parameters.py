@@ -12,7 +12,12 @@ MA_interval = 20
 RSI_interval = 14
 
 macd_parameters = {
-    "fast_ema_period" : 12,
-    "slow_ema_period" : 26,
-    "signal_period" : 9
+    "fast_ema_interval" : 12,
+    "slow_ema_interval" : 26,
+    "signal_interval" : 9
+}
+
+bollinger_parameters = {
+    "interval" : 20,
+    "deviations" : 2 
 }
